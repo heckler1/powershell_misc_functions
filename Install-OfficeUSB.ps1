@@ -7,16 +7,13 @@
 # ============================================================================= 
 function Install-OfficeUSB {
     if ($office = Get-WMIObject win32_volume | ? { $_.DriveType -eq 2 } | ? { ($_.FileSystem -eq "FAT32") -and ($_.label -eq "OFFICE_2016") -and (($_.capacity/1gb) -lt 10)}) {
-        $messagebox.text+= "Office installer USB found, beginning install..."
-        $objForm.refresh()
+        Write-Host "Office installer USB found, beginning install..."
         try {
             Start-Process -filepath "$($office.DriveLetter)\Office 2016\office\setup32.exe" -wait
-            $messagebox.text+= "Success`r`n"
-            $objForm.refresh()
+            Write-Host "Success"
         }
         catch {
-            $messagebox.text+= " " + $_.Exception.Message; + " `r`n"
-            $objForm.refresh()
+            Write-Host $_.Exception.Message
             return
         }
     }
@@ -26,14 +23,12 @@ function Install-OfficeUSB {
         Add-Type -AssemblyName System.Windows.Forms
 
         # Show message box
-        $picAnswer = [System.Windows.Forms.MessageBox]::Show("Could not find Office Installer USB, please insert USB Drive.", 'Warning', 'RetryCancel', 'Warning')
+        $result = [System.Windows.Forms.MessageBox]::Show("Could not find Office Installer USB, please insert USB Drive.", 'Warning', 'RetryCancel', 'Warning')
 
-        if ($picAnswer -eq 'Retry') {
+        if ($result -eq 'Retry') {
             Install-OfficeUSB
         }
         else {
-            $objOffice.checked = $true
-            $objForm.refresh()
             return
         }
     }

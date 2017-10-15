@@ -15,22 +15,18 @@ Function Initialize-IntelSSD {
         $IntelSSD = Get-WMIObject win32_diskdrive | ? { $_.DeviceID -eq "\\.\PHYSICALDRIVE0" -and $_.Model -like "*INTEL*"}
         if ($IntelSSD) {
             # If Intel SSD, run TRIM and update firmware to latest version
-            $messagebox.text+= "Updating Intel SSD firmware and running TRIM..."
+            Write-Host "Updating Intel SSD firmware and running TRIM..."
             Start-Process $exe -Wait -args "-drive_index 0 -trim"
             Start-Process $exe -Wait -args "-drive_index 0 -firmware_update"
-            $messagebox.text+= "Success`r`n"
-            $objForm.refresh()
+            Write-Host "Success"
         }
         else {
-            $messagebox.text+= "No Intel SSDs found. Please uninstall the Intel SSD Toolbox... `r`n"
-            $objForm.refresh()
+            Write-Host "No Intel SSDs found. Please uninstall the Intel SSD Toolbox..."
             Start-Process "C:\Program Files (x86)\Intel\Intel(R) SSD Toolbox\uninstall\Setup.exe" -args "-uninstall" -wait
-            $messagebox.text+= "Complete`r`n"
-            $objForm.refresh()
+            Write-Host "Complete"
         }
     }
     else {
-        $messagebox.text+= "Intel SSD Toolbox not found. `r`n"
-        $objForm.refresh()
+        Write-Host "Intel SSD Toolbox not found."
     }
 }
