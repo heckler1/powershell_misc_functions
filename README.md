@@ -7,3 +7,5 @@ The Initialize-IntelSSD function checks for the Intel SSD Toolbox, and if it fin
 The Set-WindowsMediaPlayer function adds registry values to skip the first run setup wizard in Windows Media Player.
 
 The Set-NetworkInts function checks if any attached NICs are not set to DHCP. If the interface is up, it prints a warning; if the interface is down it sets the interface to DHCP.
+
+The Get-HardwareSpec function reports the CPU model, number of CPU cores, RAM capacity and number of serial ports.
